@@ -11,7 +11,7 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.TransactionManager;
 
 @Slf4j
-@Configuration
+//@Configuration
 public class DbConfig {
 
     @Bean
