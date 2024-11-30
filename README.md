@@ -270,7 +270,7 @@ memory.MemoryCondition                   : memory=null
 
 이번에는 `memory=on` 조건을 주고 실행해보자.
 
-
+<img width="671" alt="Screenshot 2024-11-27 at 23 06 39" src="https://github.com/user-attachments/assets/76d952b1-b5db-4f3e-a46e-38ebf24753e7">
 
 VM 옵션을 추가하는 경우 `-Dmemory=on` 를 사용해야 한다.
 
