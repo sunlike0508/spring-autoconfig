@@ -301,5 +301,11 @@ memory.MemoryFinder                      : init memoryFinder
 
 여기에 대한 더 자세한 내용은 뒤에서 다룬다.
 
+## @Conditional - 다양한 기능
+
+지금까지 `Condition` 인터페이스를 직접 구현해서 `MemoryCondition` 이라는 구현체를 만들었다. 
+
+스프링은 이미 필요한 대부분의 구현체를 만들어두었다. 이번에는 스프링이 제공하는 편리한 기능을 사용해보자.
+
 
 
