@@ -308,6 +308,88 @@ memory.MemoryFinder                      : init memoryFinder
 스프링은 이미 필요한 대부분의 구현체를 만들어두었다. 이번에는 스프링이 제공하는 편리한 기능을 사용해보자.
 
 ```java
+@Configuration
+//@Conditional(MemoryCondition.class)
+@ConditionalOnProperty(name = "memmory", havingValue = "on")
+public class MemoryConfig {
+
+    @Bean
+    public MemoryController memoryController() {
+        return new MemoryController(memoryFinder());
+    }
+
+
+    @Bean
+    public MemoryFinder memoryFinder() {
+        return new MemoryFinder();
+    }
+}
+
 ```
 
+`@Conditional(MemoryCondition.class)` 를 주석처리 하자
 
+`@ConditionalOnProperty(name = "memory", havingValue = "on")` 를 추가하자 환경 정보가 `memory=on` 이라는 조건에 맞으면 동작하고, 그렇지 않으면 동작하지 않는다.
+
+우리가 앞서 만든 기능과 동일하다.
+
+**@ConditionalOnProperty**
+
+```java
+package org.springframework.boot.autoconfigure.condition;
+@Conditional(OnPropertyCondition.class)
+public @interface ConditionalOnProperty {...} 
+```
+
+`@ConditionalOnProperty` 도 우리가 만든 것과 동일하게 내부에는 `@Conditional` 을 사용한다. 
+
+그리고 그 안에 `Condition` 인터페이스를 구현한 `OnPropertyCondition` 를 가지고 있다.
+
+**실행**
+
+http://localhost:8080/memory
+
+실행해보면 앞서 만든 기능과 동일하게 동작하는 것을 확인할 수 있다.
+
+### @ConditionalOnXxx
+
+스프링은 `@Conditional` 과 관련해서 개발자가 편리하게 사용할 수 있도록 수 많은 `@ConditionalOnXxx` 를 제공 한다.
+
+대표적인 몇가지를 알아보자.
+
+* `@ConditionalOnClass` , `@ConditionalOnMissingClass`
+  * 클래스가 있는 경우 동작한다. 나머지는 그 반대
+* `@ConditionalOnBean` , `@ConditionalOnMissingBean`
+  * 빈이 등록되어 있는 경우 동작한다. 나머지는 그 반대 
+* `@ConditionalOnProperty`
+  * 환경 정보가 있는 경우 동작한다. 
+* `@ConditionalOnResource`
+  * 리소스가 있는 경우 동작한다.
+* `@ConditionalOnWebApplication` , `@ConditionalOnNotWebApplication`
+  * 웹 애플리케이션인 경우 동작한다. 
+* `@ConditionalOnExpression`
+  * SpEL 표현식에 만족하는 경우 동작한다.
+
+**ConditionalOnXxx 공식 메뉴얼**
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.developing-auto-configuration.condition-annotations
+
+
+다음 자동 구성 클래스들을 열어서 소스 코드를 확인해보면 `@ConditionalOnXxx` 가 아주 많이 사용되는 것을 확인 할 수 있다.
+
+`JdbcTemplateAutoConfiguration` , `DataSourceTransactionManagerAutoConfiguration` , `DataSourceAutoConfiguration`
+
+**참고**
+
+`@Conditional` 자체는 스프링 부트가 아니라 스프링 프레임워크의 기능이다. 
+
+스프링 부트는 이 기능을 확장해서 `@ConditionalOnXxx` 를 제공한다.
+
+**정리**
+스프링 부트가 제공하는 자동 구성 기능을 이해하려면 다음 개념을 이해해야 한다.
+
+`@Conditional` : 특정 조건에 맞을 때 설정이 동작하도록 한다. 
+
+`@AutoConfiguration` : 자동 구성이 어떻게 동작하는지 내부 원리 이해
+
+지금까지 `@Conditional` 에 대해서 알아보았으니, 지금부터는 `@AutoConfiguration` 을 알아보자.
